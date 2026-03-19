@@ -58,17 +58,130 @@
  *   manager.removeItem("Phool"); // => true
  */
 export function setupAddButton(button, thaliElement, itemName) {
-  // Your code here
+  if (button === null || thaliElement === null || itemName === null)
+    return null;
+  if (
+    button === undefined ||
+    thaliElement === undefined ||
+    itemName === undefined
+  )
+    return null;
+
+  function attach() {
+    function handler() {
+      const li = document.createElement("li");
+      li.textContent = `${itemName}`;
+      thaliElement.appendChild(li);
+    }
+    button.addEventListener("click", handler);
+
+    return function () {
+      button.removeEventListener("click", handler);
+    };
+  }
+
+  const detach = attach();
+
+  return detach;
 }
 
 export function setupRemoveButton(button, thaliElement) {
-  // Your code here
+  if (thaliElement === null || thaliElement === undefined) return null;
+  if (button === null || button === undefined) return null;
+
+  function addClick() {
+    function handle() {
+      if (thaliElement.lastElementChild) {
+        thaliElement.lastElementChild.remove();
+      } else if (!thaliElement.lastElementChild) {
+        return;
+      }
+    }
+    button.addEventListener("click", handle);
+
+    return function () {
+      button.removeEventListener("click", handle);
+    };
+  }
+  const detach = addClick();
+
+  return detach;
 }
 
 export function setupToggleItem(button, thaliElement, itemName) {
-  // Your code here
+  if (button === null || button === undefined) return null;
+  if (thaliElement === null || thaliElement === undefined) return null;
+  if (itemName === null || itemName === undefined) return null;
+
+  function attach() {
+    function handleClick() {
+      if (
+        thaliElement.lastElementChild &&
+        thaliElement.textContent === itemName
+      ) {
+        thaliElement.lastElementChild.remove();
+      } else if (!thaliElement.lastElementChild) {
+        const li = document.createElement("li");
+        li.textContent = `${itemName}`;
+        thaliElement.appendChild(li);
+      }
+    }
+    button.addEventListener("click", handleClick);
+
+    return function () {
+      button.removeEventListener("click", handleClick);
+    };
+  }
+
+  const detach = attach();
+  return detach;
 }
 
 export function createThaliManager(thaliElement, counterElement) {
-  // Your code here
+  if (thaliElement === null || thaliElement === undefined) return null;
+  if (counterElement === null || counterElement === undefined) return null;
+
+  function attach() {
+    let temp = 1;
+    function addItem(name) {
+      const li = document.createElement("li");
+      li.textContent = `${name}`;
+      thaliElement.appendChild(li);
+      counterElement.textContent = temp++;
+      return thaliElement;
+    }
+    function removeItem(name) {
+      const item = thaliElement.children;
+
+      for(let i = 0; i < item.length; i++){
+        if(item[i].textContent.trim() === name){
+          item[i].remove()
+          counterElement.textContent = thaliElement.children.length;
+          return true
+        }
+      }
+      return false
+    }
+    function getCount() {
+      let num = null;
+      if (thaliElement.lastElementChild) {
+        num = thaliElement.children.length;
+      }
+      return num;
+    }
+    function clear() {
+      thaliElement.innerHTML = "";
+      temp = 0;
+      counterElement.textContent = temp;
+      return counterElement;
+    }
+    return {
+      addItem,
+      removeItem,
+      getCount,
+      clear,
+    };
+  }
+  const detachObj = attach();
+  return detachObj;
 }

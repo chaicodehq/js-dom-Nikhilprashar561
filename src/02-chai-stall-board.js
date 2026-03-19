@@ -22,7 +22,7 @@
  *   1. updateChaiPrice(document, chaiType, newPrice)
  *      - Finds element with id "price-{chaiType}" using getElementById
  *      - Sets its textContent to "₹{newPrice}"
- *      - Returns true if element found and updated, false if not found
+ *      - Returns true if element found and updated, fals   ce if not found
  *      - Validation: newPrice must be a number > 0, else return false
  *      - chaiType must be a non-empty string, else return false
  *
@@ -65,17 +65,69 @@
  *   // => "cutting" (cheapest chai gets "cheapest" class)
  */
 export function updateChaiPrice(document, chaiType, newPrice) {
-  // Your code here
+  if (typeof newPrice !== "number" || newPrice <= 0) return false;
+  if (typeof chaiType !== "string" || chaiType.length === 0) return false;
+
+  const priceChai = document.getElementById(`price-${chaiType}`);
+
+  if (!priceChai) return false;
+
+  priceChai.textContent = `₹${newPrice}`;
+
+  if (priceChai) return true;
+  if (!priceChai) return false;
 }
 
 export function getChaiPrice(document, chaiType) {
-  // Your code here
+  const elem = document.getElementById(`price-${chaiType}`);
+
+  if (!elem) return null;
+  let data = elem.textContent;
+  let db = data.slice(1);
+  let convert = parseInt(db);
+
+  elem.textContent = convert;
+  return convert;
 }
 
 export function updateStallName(document, newName) {
-  // Your code here
+  const cls = document.querySelector(".stall-name");
+
+  if (!cls) return null;
+  if (typeof newName !== "string" || newName.length === 0) return null;
+
+  let temp = cls.textContent;
+  cls.textContent = newName;
+
+  return temp;
 }
 
 export function highlightCheapestChai(document) {
-  // Your code here
+  const chaiElem = document.querySelectorAll(".chai-price");
+
+  if(!chaiElem || chaiElem.length === 0) return null;
+
+  let min = 1000;
+  let cheapEst = null;
+
+  chaiElem.forEach((e) => {
+    let temp = e.textContent;
+    let data = temp.slice(1);
+    let convert = parseInt(data);
+
+    if (convert < min) {
+      min = convert;
+      cheapEst = e;
+    }
+  });
+
+  chaiElem.forEach((e) => {
+    if (e === cheapEst) {
+      e.classList.add("cheapest");
+    } else {
+      e.classList.remove("cheapest");
+    }
+  });
+
+  return cheapEst.getAttribute("data-chai");
 }

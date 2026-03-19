@@ -35,11 +35,11 @@
  *      - Returns false if class not present
  *      - Agar element null/undefined, return false
  *
- *   5. replaceDesign(element, oldDesign, newDesign)
- *      - Removes class "design-{oldDesign}" and adds "design-{newDesign}"
- *      - Returns true if oldDesign class was present and replaced
- *      - Returns false if oldDesign class was NOT found (newDesign still added)
- *      - Agar element null/undefined, return false
+ *   5. replaceDesign(element, oldDesign, newDesign);
+ *      - Removes class "design-{oldDesign}" and adds "design-{newDesign}";
+ *      - Returns true if oldDesign class was present and replaced;
+ *      - Returns false if oldDesign class was NOT found (newDesign still added);
+ *      - Agar element null/undefined, return false;
  *
  *   6. getActiveColors(element)
  *      - Returns array of all active color names from classes
@@ -70,25 +70,73 @@
  *   // => ["red", "blue"]
  */
 export function addColors(element, ...colors) {
-  // Your code here
+  if (element === null || element === undefined) return -1;
+  let temp = 0;
+
+  colors.forEach((e) => {
+    if (element.classList.contains(e)) {
+      return;
+    } else if (!element.classList.contains(e)) {
+      element.classList.add(e);
+      temp++;
+    }
+  });
+  return temp;
 }
 
 export function removeColors(element, ...colors) {
-  // Your code here
+  if (element === null || element === undefined) return -1;
+  let temp = 0;
+  colors.map((e) => {
+    if (!element.classList.contains(e)) {
+      return;
+    } else if (element.classList.contains(e)) {
+      element.classList.remove(e);
+      temp++;
+    }
+  });
+  return temp;
 }
 
 export function togglePattern(element, pattern) {
-  // Your code here
+  if (element === null || element === undefined) return null;
+  if (!element.classList.toggle(`pattern-${pattern}`)) {
+    return false;
+  } else if (element.classList.toggle) {
+    return true;
+  }
 }
 
 export function hasDesign(element, designName) {
-  // Your code here
+  if (element === null || element === undefined) return false;
+  if (element.classList.contains(`design-${designName}`)) {
+    return true;
+  } else if (!element.classList.contains(`design-${designName}`)) {
+    return false;
+  }
 }
 
 export function replaceDesign(element, oldDesign, newDesign) {
-  // Your code here
+  if (element === null || element === undefined) return false;
+  if (element.classList.contains(`design-${oldDesign}`)) {
+    element.classList.remove(`design-${oldDesign}`);
+    element.classList.add(`design-${newDesign}`);
+    return true;
+  } else if (!element.classList.contains(`design-${oldDesign}`)) {
+    element.classList.add(`design-${newDesign}`);
+    return false;
+  }
 }
 
 export function getActiveColors(element) {
-  // Your code here
+  if (element === null || element === undefined) return [];
+  const getClass = element.classList;
+  const arr = [];
+  getClass.forEach((e) => {
+    if (e.startsWith(`color-`)) {
+      const color = e.slice(6);
+      arr.push(color);
+    }
+  });
+  return arr;
 }
