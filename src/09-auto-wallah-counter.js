@@ -87,29 +87,96 @@
  *   // => { total: 2, waiting: 1, serving: 1, completed: 0 }
  */
 export function findQueueContainer(element) {
-  // Your code here
+  if (element === null || element === undefined) return null;
+
+  const ances = element.closest(".queue-container");
+  if (!ances) return null;
+  return ances;
 }
 
 export function getNextInQueue(element) {
-  // Your code here
+  if (element === null || element === undefined) return null;
+  const nextSibling = element.nextElementSibling;
+  if (!nextSibling) return null;
+
+  return nextSibling;
 }
 
 export function getPreviousInQueue(element) {
-  // Your code here
+  if (element === null || element === undefined) return null;
+  const prevSibling = element.previousElementSibling;
+  if (!prevSibling) return null;
+  return prevSibling;
 }
 
 export function getQueuePosition(element) {
-  // Your code here
+  if (element === null || element === undefined) return -1;
+  if (!element.parentNode) return -1;
+
+  const find = element.parentNode.children;
+
+  if (!find || find === null) return -1;
+
+  for (let i = 0; i < find.length; i++) {
+    if (find[i] === element) {
+      return i + 1;
+    }
+  }
+  return -1;
 }
 
 export function moveToFront(element) {
-  // Your code here
+  if (element === null || element === undefined) return false;
+
+  const prnt = element.parentNode;
+  if (!prnt) return false;
+
+  if (element === prnt.firstElementChild) return false;
+  const add = element.parentNode.insertBefore(
+    element,
+    prnt.firstChild,
+  );
+  if(add) return true;
+  if (!add) return false;
+
+  return true;
 }
 
 export function removeFromQueue(element) {
-  // Your code here
+  if (element === null || element === undefined) return null;
+  const chk = element.parentNode;
+  if (!chk) return null;
+  const remove = element.parentNode.removeChild(element);
+
+  return remove;
 }
 
 export function getQueueStats(queueContainer) {
-  // Your code here
+    if (queueContainer === null || queueContainer === undefined) return null;
+
+  let total = 0;
+  let waiting = 0;
+  let serving = 0;
+  let completed = 0;
+
+  const chld = queueContainer.children;
+
+  for (let child of chld) {
+    if (child.classList.contains("waiting")) {
+      waiting++;
+    }
+    if (child.classList.contains("serving")) {
+      serving++;
+    }
+    if (child.classList.contains("completed")) {
+      completed++;
+    }
+    total++;
+  }
+  return {
+    total,
+    waiting,
+    serving,
+    completed,
+  };
 }

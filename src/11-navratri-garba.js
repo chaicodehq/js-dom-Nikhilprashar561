@@ -89,25 +89,76 @@
  *   // => deep clone of stage with id "stage-clone"
  */
 export function insertDancer(stage, newDancer, referenceDancer) {
-  // Your code here
+  if (stage === null || stage === undefined) return false;
+  if (newDancer === null || newDancer === undefined) return false;
+
+  if (referenceDancer === null) {
+    stage.appendChild(newDancer);
+    return true;
+  }
+  stage.insertBefore(newDancer, referenceDancer);
+
+  return true;
 }
 
 export function cloneDancer(dancer, deep) {
-  // Your code here
+  if (dancer === null || dancer === undefined) return null;
+
+  const cpy = dancer.cloneNode(deep);
+  if (cpy.id) {
+    cpy.id = cpy.id + "-copy";
+  }
+
+  return cpy;
 }
 
 export function replaceDancer(stage, oldDancer, newDancer) {
-  // Your code here
+  if (stage === null || stage === undefined) return null;
+  if (newDancer === null || newDancer === undefined) return null;
+  if (oldDancer === null || oldDancer === undefined) return null;
+
+  if (!stage.contains(oldDancer)) return null;
+
+  stage.replaceChild(newDancer, oldDancer);
+
+  return oldDancer;
 }
 
 export function removeDancer(stage, dancer) {
-  // Your code here
+  if (stage === null || stage === undefined) return null;
+  if (dancer === null || dancer === undefined) return null;
+
+  if (!stage.contains(dancer)) return null;
+  stage.removeChild(dancer);
+  return dancer;
 }
 
 export function rearrangeStage(stage, order) {
-  // Your code here
+  if (stage === null || stage === undefined) return false;
+  if (!Array.isArray(order)) return false;
+
+  const store = stage.children;
+  const getIt = Array.from(stage.children);
+
+  stage.innerHTML = "";
+
+  if (getIt.length !== order.length) return false;
+
+  for (let i = 0; i < order.length; i++) {
+    if (order[i] < 0 || !getIt[order[i]]) return false;
+    if (getIt[order[i]]) {
+      stage.appendChild(getIt[order[i]]);
+      // return true;
+    }
+  }
+  return true;
 }
 
 export function duplicateFormation(stage) {
-  // Your code here
+  if (stage === null || stage === undefined) return null;
+
+  const stg = stage.cloneNode(true);
+  stg.id = stg.id + "-clone";
+
+  return stg;
 }

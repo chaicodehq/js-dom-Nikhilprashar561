@@ -90,25 +90,101 @@
  *   // => [pandal1, pandal3] (elements with data-zone="North")
  */
 export function createPandalElement(pandal) {
-  // Your code here
+  if (pandal === null || pandal === undefined || !pandal) return null;
+  const { name, zone, theme, budget, rating } = pandal;
+
+  if (!name || !zone || !theme || !budget || !rating) {
+    return null;
+  }
+
+  if (typeof budget !== "number") return null;
+  if (typeof rating !== "number") return null;
+
+  const div = document.createElement("div");
+  div.classList.add("pandal");
+
+  div.dataset.name = `${name}`;
+  div.dataset.zone = `${zone}`;
+  div.dataset.theme = `${theme}`;
+  div.dataset.budget = `${budget}`;
+  div.dataset.rating = `${rating}`;
+
+  div.textContent = name;
+
+  return div;
 }
 
 export function getPandalInfo(element) {
-  // Your code here
+  if (element === null || element === undefined) return null;
+
+  const chmaka = element.dataset;
+
+  return {
+    name: chmaka.name,
+    zone: chmaka.zone,
+    theme: chmaka.theme,
+    budget: Number(chmaka.budget),
+    rating: Number(chmaka.rating),
+  };
 }
 
 export function updatePandalRating(element, newRating) {
-  // Your code here
+  if (element === null || element === undefined) return null;
+
+  if (!element.dataset.rating) return null;
+
+  if (typeof newRating !== "number") return null;
+  if (newRating < 0 || newRating > 5) return null;
+
+  const oldOne = element.dataset.rating;
+  element.dataset.rating = newRating;
+
+  return Number(oldOne);
 }
 
 export function filterPandalsByZone(container, zone) {
-  // Your code here
+  if (container === null || container === undefined) return [];
+  if (typeof zone !== "string") return [];
+
+  const pandal = container.querySelectorAll(".pandal");
+
+  let arr = [];
+
+  for (let key of pandal) {
+    if (key.dataset.zone === zone) {
+      arr.push(key);
+    }
+  }
+
+  return arr;
 }
 
 export function getPandalsByBudgetRange(container, min, max) {
-  // Your code here
+  if (container === null || container === undefined) return [];
+  if (typeof min !== "number" || typeof max !== "number") return [];
+
+  const pandal = container.querySelectorAll(".pandal");
+
+  const arr = [];
+
+  for (const element of pandal) {
+    const value = Number(element.dataset.budget);
+    if (value <= max && value >= min) {
+      arr.push(element);
+    }
+  }
+  return arr;
 }
 
 export function sortPandalsByRating(container) {
-  // Your code here
+  if (container === null || container === undefined) return [];
+  const arr = Array.from(container.querySelectorAll('.pandal'));
+
+  arr.sort((a, b) => {
+    return Number(b.dataset.rating) - Number(a.dataset.rating);
+  });
+
+  arr.forEach((e) => container.appendChild(e))
+
+  return arr;
 }
